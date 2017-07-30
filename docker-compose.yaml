@@ -9,11 +9,27 @@ services:
     memory: 256M
    restart_policy:
     condition: on-failure
+  expose:
+   - "6379"
+  networks:
+   - opnet
+ pgsql:
+  build: ./db
+  image: hur/pgsql:9.6.3
+  deploy:
+   replicas: 1
+   resources:
+    cpus: "0.3"
+    memory: 512M
+   restart_policy:
+    condition: on-failure
+  environment:
+   POSTGRES_PASSWORD: faisal123
   networks:
    - opnet
  webauth:
-  context: ./webauth
-  image: webauth
+  build: ./webauth
+  image: hur/webauth:1.0.0-alpha
   deploy:
    replicas: 1
    resources:
@@ -23,8 +39,22 @@ services:
     condition: on-failure
   links:
    - redis
-  command:
-   java -jar webauth-1.0-jar-with-dependencies.jar
+   - pgsql
+  environment:
+   REDIS_SERVER: redis
+   MQ_HOST: rabbitmq
+   MQ_USERNAME: svc
+   MQ_PASSWORD: svc
+   DB_HOST: pgsql
+   DB_USERNAME: postgres
+   DB_PASSWORD: faisal123
+  depends_on:
+   - redis
+   - pgsql
+  expose:
+   - "80"
+  networks:
+   - opnet
 networks:
  opnet:
 
