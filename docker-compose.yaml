@@ -75,6 +75,61 @@ services:
    - "5672"
   networks:
    - opnet
+ fxyahoo:
+  build: ./fxyahoo
+  image: hur/fxyahoo:1.0.0-alpha
+  deploy:
+   replicas: 1
+   resources:
+    cpus: "0.1"
+    memory: 128M
+   restart_policy:
+    condition: on-failure
+  links:
+   - redis
+   - pgsql
+   - rabbitmq
+  environment:
+   REDIS_SERVER: redis
+   MQ_HOST: rabbitmq
+   MQ_USERNAME: svc
+   MQ_PASSWORD: svc
+   DB_HOST: pgsql
+   DB_USERNAME: postgres
+   DB_PASSWORD: faisal123
+  depends_on:
+   - redis
+   - pgsql
+   - rabbitmq
+  networks:
+   - opnet
+ mqstats:
+  build: ./mqstats
+  image: hur/mqstats:1.0.0-alpha
+  deploy:
+   replicas: 1
+   resources:
+    cpus: "0.1"
+    memory: 128M
+   restart_policy:
+    condition: on-failure
+  links:
+   - redis
+   - pgsql
+   - rabbitmq
+  environment:
+   REDIS_SERVER: redis
+   MQ_HOST: rabbitmq
+   MQ_USERNAME: svc
+   MQ_PASSWORD: svc
+   DB_HOST: pgsql
+   DB_USERNAME: postgres
+   DB_PASSWORD: faisal123
+  depends_on:
+   - redis
+   - pgsql
+   - rabbitmq
+  networks:
+   - opnet
 networks:
  opnet:
-
