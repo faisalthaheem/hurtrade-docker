@@ -118,13 +118,10 @@ services:
    - pgsql
    - rabbitmq
   environment:
-   REDIS_SERVER: redis
    MQ_HOST: rabbitmq
    MQ_USERNAME: svc
    MQ_PASSWORD: svc
-   DB_HOST: pgsql
-   DB_USERNAME: postgres
-   DB_PASSWORD: faisal123
+   MQ_MGMT_BASE_URL: http://rabbitmq:15672
   depends_on:
    - redis
    - pgsql
