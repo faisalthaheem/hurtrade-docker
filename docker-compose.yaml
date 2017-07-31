@@ -70,9 +70,11 @@ services:
   depends_on:
    - webauth
   ports:
+   - "5672:5672"
    - "15672:15672"
   expose:
    - "5672"
+   - "15672"
   networks:
    - opnet
  fxyahoo:
