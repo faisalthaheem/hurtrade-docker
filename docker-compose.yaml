@@ -40,7 +40,6 @@ services:
   links:
    - redis
    - pgsql
-   - rabbitmq
   environment:
    REDIS_SERVER: redis
    MQ_HOST: rabbitmq
@@ -58,7 +57,7 @@ services:
    - opnet
  rabbitmq:
   build: ./rabbitmq
-  image: hur/rabbitmq:3.6.10-management
+  image: hur/rabbitmq:3.6.8-management
   deploy:
    replicas: 1
    resources:
@@ -70,6 +69,10 @@ services:
    - webauth
   depends_on:
    - webauth
+  ports:
+   - "15672:15672"
+  expose:
+   - "5672"
   networks:
    - opnet
 networks:
