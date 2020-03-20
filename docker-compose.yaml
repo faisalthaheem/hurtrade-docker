@@ -1,45 +1,22 @@
-version: "3"
+version: "3.3"
+
 services:
  redis:
   image: redis
-  deploy:
-   replicas: 1
-   resources:
-    cpus: "0.1"
-    memory: 256M
-   restart_policy:
-    condition: on-failure
-  expose:
+  ports:
    - "6379"
   networks:
    - opnet
+ 
  pgsql:
-  build: ./db
-  image: hur/pgsql:9.6.3
-  deploy:
-   replicas: 1
-   resources:
-    cpus: "0.3"
-    memory: 512M
-   restart_policy:
-    condition: on-failure
+  image: faisalthaheem/hurtrade-pgsql:v1.0.0-alpha
   environment:
    POSTGRES_PASSWORD: faisal123
   networks:
    - opnet
+ 
  webauth:
-  build: ./webauth
-  image: hur/webauth:1.0.0-alpha
-  deploy:
-   replicas: 1
-   resources:
-    cpus: "0.1"
-    memory: 256M
-   restart_policy:
-    condition: on-failure
-  links:
-   - redis
-   - pgsql
+  image: faisalthaheem/hurtrade-webauth:v1.0.0-alpha
   environment:
    REDIS_SERVER: redis
    MQ_HOST: rabbitmq
@@ -51,46 +28,23 @@ services:
   depends_on:
    - redis
    - pgsql
-  expose:
+  ports:
    - "80"
   networks:
    - opnet
+ 
  rabbitmq:
-  build: ./rabbitmq
-  image: hur/rabbitmq:3.6.8-management
-  deploy:
-   replicas: 1
-   resources:
-    cpus: "0.3"
-    memory: 512M
-   restart_policy:
-    condition: on-failure
-  links:
-   - webauth
+  image: faisalthaheem/hurtrade-rabbitmq:v1.0.0-alpha
   depends_on:
    - webauth
   ports:
    - "5672:5672"
    - "15672:15672"
-  expose:
-   - "5672"
-   - "15672"
   networks:
    - opnet
+ 
  fxyahoo:
-  build: ./fxyahoo
-  image: hur/fxyahoo:1.0.0-alpha
-  deploy:
-   replicas: 1
-   resources:
-    cpus: "0.1"
-    memory: 128M
-   restart_policy:
-    condition: on-failure
-  links:
-   - redis
-   - pgsql
-   - rabbitmq
+  image: faisalthaheem/hurtrade-fxyahoo:v1.0.0-alpha
   environment:
    REDIS_SERVER: redis
    MQ_HOST: rabbitmq
@@ -105,20 +59,9 @@ services:
    - rabbitmq
   networks:
    - opnet
+ 
  mqstats:
-  build: ./mqstats
-  image: hur/mqstats:1.0.0-alpha
-  deploy:
-   replicas: 1
-   resources:
-    cpus: "0.1"
-    memory: 128M
-   restart_policy:
-    condition: on-failure
-  links:
-   - redis
-   - pgsql
-   - rabbitmq
+  image: faisalthaheem/hurtrade-mqstats:v1.0.0-alpha
   environment:
    MQ_HOST: rabbitmq
    MQ_USERNAME: svc
@@ -130,20 +73,9 @@ services:
    - rabbitmq
   networks:
    - opnet
+ 
  hurcpu:
-  build: ./hurcpu
-  image: hur/hurcpu:1.0.0-alpha
-  deploy:
-   replicas: 1
-   resources:
-    cpus: "0.1"
-    memory: 256M
-   restart_policy:
-    condition: on-failure
-  links:
-   - redis
-   - pgsql
-   - rabbitmq
+  image: faisalthaheem/hurtrade-hurcpu:v1.0.0-alpha
   environment:
    REDIS_SERVER: redis
    MQ_HOST: rabbitmq
@@ -158,5 +90,6 @@ services:
    - rabbitmq
   networks:
    - opnet
+
 networks:
  opnet:
