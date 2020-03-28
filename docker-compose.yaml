@@ -9,14 +9,14 @@ services:
    - opnet
  
  pgsql:
-  image: faisalthaheem/hurtrade-pgsql:v1.0.0-alpha
+  image: faisalthaheem/hurtrade-pgsql:latest
   environment:
    POSTGRES_PASSWORD: faisal123
   networks:
    - opnet
  
  webauth:
-  image: faisalthaheem/hurtrade-webauth:v1.0.0-alpha
+  image: faisalthaheem/hurtrade-webauth:latest
   environment:
    REDIS_SERVER: redis
    MQ_HOST: rabbitmq
@@ -34,7 +34,7 @@ services:
    - opnet
  
  rabbitmq:
-  image: faisalthaheem/hurtrade-rabbitmq:v1.0.0-alpha
+  image: faisalthaheem/hurtrade-rabbitmq:latest
   depends_on:
    - webauth
   ports:
@@ -43,8 +43,8 @@ services:
   networks:
    - opnet
  
- fxyahoo:
-  image: faisalthaheem/hurtrade-fxyahoo:v1.0.0-alpha
+ coingecko:
+  image: faisalthaheem/hurtrade-coin-gecko:latest
   environment:
    REDIS_SERVER: redis
    MQ_HOST: rabbitmq
@@ -61,7 +61,7 @@ services:
    - opnet
  
  mqstats:
-  image: faisalthaheem/hurtrade-mqstats:v1.0.0-alpha
+  image: faisalthaheem/hurtrade-mqstats:latest
   environment:
    MQ_HOST: rabbitmq
    MQ_USERNAME: svc
@@ -75,7 +75,7 @@ services:
    - opnet
  
  hurcpu:
-  image: faisalthaheem/hurtrade-hurcpu:v1.0.0-alpha
+  image: faisalthaheem/hurtrade-hurcpu:latest
   environment:
    REDIS_SERVER: redis
    MQ_HOST: rabbitmq

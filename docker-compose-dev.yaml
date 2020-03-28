@@ -1,0 +1,41 @@
+version: "3.3"
+
+services:
+ redis:
+  image: redis
+  ports:
+   - "6379:6379"
+  networks:
+   - opnet
+ 
+ pgsql:
+  image: faisalthaheem/hurtrade-pgsql:v1.0.0-alpha
+  environment:
+   POSTGRES_PASSWORD: faisal123
+  ports:
+   - "5400:5432"
+  networks:
+   - opnet
+  
+ rabbitmq:
+  image: rabbitmq:3-management
+  ports:
+   - "5672:5672"
+   - "15672:15672"
+  networks:
+   - opnet
+
+ pgadmin:
+  depends_on: 
+   - pgsql
+  image: dpage/pgadmin4
+  ports:
+   - "8888:80"
+  networks:
+   - opnet
+  environment:
+   PGADMIN_DEFAULT_EMAIL: u@u.c
+   PGADMIN_DEFAULT_PASSWORD: admin
+ 
+networks:
+ opnet:
