@@ -15,6 +15,18 @@ services:
   networks:
    - opnet
  
+ pgadmin:
+  depends_on: 
+   - pgsql
+  image: dpage/pgadmin4
+  ports:
+   - "8888:80"
+  networks:
+   - opnet
+  environment:
+   PGADMIN_DEFAULT_EMAIL: u@u.c
+   PGADMIN_DEFAULT_PASSWORD: admin
+
  webauth:
   image: faisalthaheem/hurtrade-webauth:latest
   environment:
